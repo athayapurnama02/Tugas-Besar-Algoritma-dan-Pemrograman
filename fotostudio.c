@@ -3,9 +3,13 @@
 #include <string.h>		
 #include <time.h>		
 
-time_t timeS;	
+//STRUCT TIME
+time_t timeS;
+
+//VARIABEL FILE LOGIN	
 char fileName[]="logR.txt";
 
+//STRUCT USER ATAU PENGGUNA
 typedef struct USER {
 	char nama [50];
 	char email [50];
@@ -13,18 +17,21 @@ typedef struct USER {
 	char password [8];
 } user; user ppl;
 
+//STRUCT DATA PEMESAN
 typedef struct {
 	char *nama[50];
 	char *telepon[15];
 	char *alamat[75];
 } ID;
 
+//STRUCT WAKTU (TANGGAL, BULAN, TAHUN)
 typedef struct {
 	int tanggal;
 	int bulan;
 	int tahun;
 } Date;
 
+//PROSEDUR WAKTU PEMESANAN, akan ditambahkan ke file transaction.txt
 void waktu(){
 	time(&timeS);
 	struct tm* waktu = localtime(&timeS);
@@ -35,6 +42,7 @@ void waktu(){
 	fclose (hasil);
 }
 
+//PROSEDUR TAMPILAN AWAL PROGRAM
 void cover(){
 	printf("\t\t\t============================================================\n");
 	printf("\t\t\t                                                            \n");
@@ -53,6 +61,7 @@ void cover(){
 	system("cls");
 }
 
+//PROSEDUR SIGN IN ATAU LOGIN, agar mendapatkan akses ke dalam program
 void signin(){
 	void signup();
 	
@@ -74,6 +83,7 @@ void signin(){
 	// Membuka file dengan mode "r"
 	record = fopen (fileName, "r");
 
+	//Jika file logR.txt tidak ada, maka login tidak dapat dilakukan
 	if (record == NULL){
 		printf ("Error, tidak terdapat file untuk menyimpan akun\n");
 		printf ("Silahkan daftarkan akun Anda terlebih dahulu! (tekan enter)\n");
@@ -145,6 +155,7 @@ void signin(){
 	return;
 }
 
+//PROSEDUR SIGN UP ATAU REGISTRASI PENGGUNA
 void signup(){
 	
 	// Membuat pointer regis untuk file "logR.txt"
@@ -159,6 +170,7 @@ void signup(){
 	printf ("\n\t\t\t|| Nama Lengkap : ");
 	gets (ppl.nama);
 	
+	//Validasi Email
 	int ketemu = 0;
 	do{
 	printf ("\n\t\t\t|| Email        : ");
@@ -200,11 +212,13 @@ void signup(){
 	signin ();	
 }
 
+//PROSEDUR MENU UTAMA PROGRAM, berisi login, daftar, dan keluar
 void menuUtama(){
 	
 	//variabel pil untuk menyimpan pilihan yang diinput user pada switch case
 	int pil;
 	
+	//Tampilan menu utama
 	menupilih:
 	printf ("\t\t\t================================\n");
 	printf ("\t\t\t      REGISTRASI DIRI ANDA      \n");
@@ -239,47 +253,58 @@ void menuUtama(){
 	}
 }
 
+//PROSEDUR INFORMASI TENTANG PEMBUAT PROGRAM
 void aboutCreator(){
 	char buff[100];
 	FILE*pembuat;
+	//Jika file about_creator.txt tidak ada, maka akan mengulang
 	if((pembuat=fopen("about_creator.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file about_creator.txt
 	while(fgets(buff, sizeof(buff), pembuat)){
 		printf("%s",buff);
 	}
 	fclose(pembuat);
 }
 
+//PROSEDUR INFORMASI TENTANG GREAT PHOTO STUDIO
 void aboutUs(){
 	char buff[100];
 	FILE*GPS;
+	//Jika file aboutUs.txt tidak ada, maka akan mengulang
 	if((GPS=fopen("aboutUs.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file aboutUs.txt
 	while(fgets(buff, sizeof(buff), GPS)){
 		printf("%s",buff);
 	}
 	fclose(GPS);
 }
 
+//PROSEDUR PILIHAN INFORMASI PAKET, HARGA PAKET, DAN PENAWARAN DISKON
 void iPackSelection(){
 	char buff[100];
 	FILE*iPackSelection;
+	//Jika file PackSelectionInformation.txt tidak ada, maka akan mengulang
 	if((iPackSelection=fopen("PackSelectionInformation.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file PackSelectionInformation.txt
 	while(fgets(buff, sizeof(buff), iPackSelection)){
 		printf("%s",buff);
 	}
 	fclose(iPackSelection);
 }
 
+//PROSEDUR PILIHAN MENU PEMESANAN DAN INFORMASI LAINNYA
 void menu1(){
 	
 	//variabel pil untuk menyimpan pilihan yang diinput user pada switch case
 	int pil;
 	
+	//Tampilan menu pemesanan dan informasi lainnya
 	menu:
 	printf ("\t\t\t===============================================================\n");
 	printf ("\t\t\t                                                               \n");
@@ -320,6 +345,7 @@ void menu1(){
 	}		
 }
 
+//FUNGSI TANGGAL REGISTRASI PEMESANAN
 Date InputTanggalPemesanan (){
 	printf ("\n=============================================================================");
 	printf ("\n                             GREAT PHOTO STUDIO                              ");
@@ -329,6 +355,7 @@ Date InputTanggalPemesanan (){
 	printf ("\n");
 }
 
+//FUNGSI INPUT DATA PEMESAN
 ID InputDataCustomer (ID customer){
 	printf("\n");
 	printf(" Nama Customer     : ");
@@ -341,10 +368,13 @@ ID InputDataCustomer (ID customer){
 	return customer;
 }
 
+//FUNGSI INPUT TANGGAL DIGUNAKAN
 Date InputTanggalDigunakan (Date digunakanTanggal){
 	do{
 	printf ("\n Digunakan pada tanggal dd  : ");
 	digunakanTanggal.tanggal=checker();
+	
+	//Validasi Tanggal
 	if(digunakanTanggal.tanggal<1||digunakanTanggal.tanggal>30){
 		printf( "\n Tanggal Tidak Valid!");
 	}
@@ -353,10 +383,13 @@ Date InputTanggalDigunakan (Date digunakanTanggal){
 	return digunakanTanggal;
 }
 
+//FUNGSI INPUT BULAN DIGUNAKAN
 Date InputBulanDigunakan (Date digunakanBulan){
 	do{
 	printf (" Digunakan pada bulan mm    : ");
 	digunakanBulan.bulan=checker();
+	
+	//Validasi Bulan
 	if(digunakanBulan.bulan<1||digunakanBulan.bulan>12){
 		printf( "\n Bulan Tidak Valid!\n");
 	}
@@ -365,10 +398,13 @@ Date InputBulanDigunakan (Date digunakanBulan){
 	return digunakanBulan;
 }
 
+//FUNGSI INPUT TAHUN DIGUNAKAN
 Date InputTahunDigunakan (Date digunakanTahun){
 	do{
 	printf (" Digunakan pada tahun yyyy  : ");
 	digunakanTahun.tahun=checker();
+	
+	//Validasi Tahun
 	if(digunakanTahun.tahun<2023||digunakanTahun.tahun>2023){
 		printf( "\n Tahun Tidak Valid!\n");
 	}
@@ -377,59 +413,73 @@ Date InputTahunDigunakan (Date digunakanTahun){
 	return digunakanTahun;
 }
 
+//PROSEDUR PILIHAN INFORMASI PAKET, HARGA PAKET, DAN PENAWARAN DISKON
 void TampilkanDaftarMenu(){
 	char buff[100];
 	FILE*in;
+	//Jika file PackSelectionInformation.txt tidak ada, maka akan mengulang
 	if((in=fopen("PackSelectionInformation.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file PackSelectionInformation.txt
 	while(fgets(buff, sizeof(buff), in)){
 		printf("%s",buff);
 	}
 	fclose(in);
 }
 
+//PROSEDUR PILIHAN OPSI TAMBAHAN PREWEDDING
 void TampilkanExtraOptionPrawedding(){
 	char buff[100];
 	FILE*extraPrewed;
+	//Jika file ExtraOptionalPrewedding.txt tidak ada, maka akan mengulang
 	if((extraPrewed=fopen("ExtraOptionalPrewedding.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file ExtraOptionalPrewedding.txt
 	while(fgets(buff, sizeof(buff), extraPrewed)){
 		printf("%s",buff);
 	}
 	fclose(extraPrewed);
 }
 
+//PROSEDUR PILIHAN OPSI TAMBAHAN DOKUMENTER
 void TampilkanExtraOptionDokumenter(){
 	char buff[100];
 	FILE*extraDokumen;
+	//Jika file ExtraOptionDokumenter.txt tidak ada, maka akan mengulang
 	if((extraDokumen=fopen("ExtraOptionDokumenter.txt", "r"))==NULL){
 		printf("\t\t\t\t\t\tTidak ada file \n\n");
 	}
+	//Memanggil dan menampilkan file ExtraOptionDokumenter.txt
 	while(fgets(buff, sizeof(buff), extraDokumen)){
 		printf("%s",buff);
 	}
 	fclose(extraDokumen);
 }
 
+//FUNGSI MENGHITUNG HARGA FOTOGRAFER
 int HitungHargaFotografer (int sewa_fotografer, int jumlah_fotografer){
 	int sub_fotografer = sewa_fotografer * jumlah_fotografer;
 	return sub_fotografer;
 }
 
+//FUNGSI MENGHITUNG HARGA VIDEOGRAFER
 int HitungHargaVideografer (int sewa_videografer, int jumlah_videografer){
 	int sub_videografer = sewa_videografer * jumlah_videografer;
 	return sub_videografer;
 }
 
+//FUNGSI MENGHITUNG HARGA DOKUMENTER PER ORANG
 int HitungHargaPerorang (int harga_perorang, int jumlah_orang){
 	int sub_perorang = harga_perorang * jumlah_orang;
 	return sub_perorang;
 }
 
+//PROSEDUR MENAMPILKAN DATA REGISTRASI PEMESAN
 void TampilkanHasilRegistrasi (ID customer, Date pesan, Date digunakanTanggal, Date digunakanBulan, Date digunakanTahun){
 	system ("cls");
+	//Tampilan detail data registrasi pemesan
 	printf ("\n=============================================================================");
 	printf ("\n|                          DETAIL DATA REGISTRASI                           |");
 	printf ("\n=============================================================================");
@@ -445,6 +495,7 @@ void TampilkanHasilRegistrasi (ID customer, Date pesan, Date digunakanTanggal, D
 	printf ("\n");
 	printf ("\n=============================================================================");
 	
+	//Mencetak detail data registrasi pemesan ke file transaction.txt
 	FILE * hasil1;
 	hasil1=fopen("transaction.txt","a");
 	fprintf (hasil1,"\n=============================================================================");
@@ -463,6 +514,7 @@ void TampilkanHasilRegistrasi (ID customer, Date pesan, Date digunakanTanggal, D
 	fclose (hasil1);
 }
 
+//VALIDASI UNTUK INPUT ANGKA
 int checker(){
     char enter;
     int input;
@@ -486,6 +538,7 @@ int checker(){
     return input;
 }
 
+//VALIDASI UNTUK INPUT ANGKA DENGAN BATAS 0 SAMPAI 35
 int checker2(){
     char enter;
     int input;
@@ -508,7 +561,8 @@ int checker2(){
     
     return input;
 }
-	
+
+//FUNGSI UTAMA PROGRAM
 int main (){
 
 	int menu;
@@ -518,11 +572,9 @@ int main (){
 	int kembalian;
 	int kembaliandisc1, kembaliandisc2;
 	ID customer;
-	//Date pemesanan, digunakan;
 	Date pemesanan, digunakanTanggal, digunakanBulan, digunakanTahun;
 	ID input_customer;
 	Date input_pemesanan, input_digunakanTanggal, input_digunakanBulan, input_digunakanTahun;
-	//Date input_pemesanan, input_digunakan;
 	char kembali = 'r';
 	int sewa_fotografer, sewa_videografer;
 	int jumlah_fotografer, jumlah_videografer;
