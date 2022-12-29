@@ -1,3 +1,8 @@
+/*NOTE REVISI
+  - PENAMBAHAN APPEND
+  - PENAMBAHAN ESTIMASI WAKTU
+*/
+
 #include <stdio.h>		
 #include <stdlib.h>		
 #include <string.h>		
@@ -37,8 +42,9 @@ void waktu(){
 	struct tm* waktu = localtime(&timeS);
 	printf (" Waktu Pemesanan   : %s", asctime (waktu));
 	FILE * hasil;
-	hasil=fopen("transaction.txt","w");
-	fprintf (hasil," Waktu Pemesanan   : %s", asctime (waktu));
+	hasil=fopen("transaction.txt","a");
+	fprintf (hasil,"\n\n\n\n/////////////////////////////////////////////////////////////////////////////////////");
+	fprintf (hasil,"\n\n Waktu Pemesanan   : %s", asctime (waktu));
 	fclose (hasil);
 }
 
@@ -69,7 +75,7 @@ void signin(){
 		Inputan tersebut akan divalidasi dengan username yang sudah terdaftar pada file logR.txt   */
 	char username[16];
 	
-	/*  Variabel password[10] digunakan untuk menyimpan input password
+	/*  Variabel password[8] digunakan untuk menyimpan input password
         yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
         dengan password yang sudah terdaftar pada file logR.txt   */
 	char password[8];
@@ -201,6 +207,8 @@ void signup(){
 	
 	// Menuliskan nama yang diinput oleh pengguna kedalam file "logR.txt"
 	fwrite (&ppl, sizeof(ppl),1,regis);
+	//fprintf (regis, "%s %s %s %s\n", ppl.nama, ppl.email, ppl.username, ppl.password);
+
 	fclose (regis);
 	printf ("\n\t\t\tRegistrasi Selesai");
 	printf ("\n\t\t\tAkun Anda Terdaftar, Mari Lakukan Login Sekarang (tekan enter)\n");
@@ -375,10 +383,10 @@ Date InputTanggalDigunakan (Date digunakanTanggal){
 	digunakanTanggal.tanggal=checker();
 	
 	//Validasi Tanggal
-	if(digunakanTanggal.tanggal<1||digunakanTanggal.tanggal>30){
+	if(digunakanTanggal.tanggal<1||digunakanTanggal.tanggal>31){
 		printf( "\n Tanggal Tidak Valid!");
 	}
-	} while (digunakanTanggal.tanggal<1||digunakanTanggal.tanggal>30);
+	} while (digunakanTanggal.tanggal<1||digunakanTanggal.tanggal>31);
 	
 	return digunakanTanggal;
 }
@@ -476,6 +484,18 @@ int HitungHargaPerorang (int harga_perorang, int jumlah_orang){
 	return sub_perorang;
 }
 
+// >>> REVISI <<<
+//KONVERSI ESTIMASI PENGERJAAN DARI MENIT KE JAM
+float menit_ke_jam (float subtotal_waktu){
+	float jam = subtotal_waktu / 60;
+	return jam;
+}
+//KONVERSI ESTIMASI PENGERJAAN DARI MENIT KE JAM
+float menit_ke_jam2 (float subtotal_waktu2){
+	float jam2 = subtotal_waktu2 / 60;
+	return jam2;
+}
+
 //PROSEDUR MENAMPILKAN DATA REGISTRASI PEMESAN
 void TampilkanHasilRegistrasi (ID customer, Date pesan, Date digunakanTanggal, Date digunakanBulan, Date digunakanTahun){
 	system ("cls");
@@ -562,6 +582,31 @@ int checker2(){
     return input;
 }
 
+//VALIDASI UNTUK INPUT ANGKA DENGAN BATAS 0 SAMPAI 8
+int checker3(){
+    char enter;
+    int input;
+    
+    if(enter=scanf("%d%c", &input, &enter)!=2){
+        fflush(stdin);
+        printf("\t\t\t     Masukkan Angka! : ");
+        return checker2(); 
+    }
+    else{
+        if(input>=0 && input<=8){
+            return input;
+        }
+        else{
+            fflush(stdin);
+            printf("\t\t\t     Mohon Maaf, Karyawan Kurang! : ");
+            return checker2();
+        }
+    }
+    
+    return input;
+}
+
+
 //FUNGSI UTAMA PROGRAM
 int main (){
 
@@ -585,6 +630,9 @@ int main (){
 	int pilih_opsi, pilih_opsi2;
 	int harga_opsi;
 	int subtotal_opsi = 0;
+	float subtotal_waktu = 60;
+	float subtotal_waktu2 = 60;
+	float waktuJadi;
 
 	cover();
 	menuUtama();
@@ -620,9 +668,9 @@ int main (){
 			printf("\n|                  Semakin Banyak Kamera, Semakin Estetik                   |");
 			printf("\n=============================================================================");
 			printf("\n Masukkan Jumlah Fotografer		: ");
-			jumlah_fotografer = checker();
+			jumlah_fotografer = checker3();
 			printf("\n Masukkan Jumlah Videografer		: ");
-			jumlah_videografer = checker();
+			jumlah_videografer = checker3();
 			printf("\n=============================================================================");
 
 			printf ("\n\nIngin Menambahkan Pembelian	 ( Y / N )	 ?	");
@@ -641,83 +689,111 @@ int main (){
 				while (i <= jumlah_opsi){
 					printf ("\n Silahkan Pilih Kode Opsi 	: ");
 					pilih_opsi=checker();
+					
+					// >>> REVISI <<<
 					if (pilih_opsi == 1){
 						harga_opsi = 240000;
+						waktuJadi = 120;
+						
 					}
 					else if (pilih_opsi == 2){
 						harga_opsi = 162000;
+						waktuJadi = 90;
 					}
 					else if (pilih_opsi == 3 || pilih_opsi == 14){
 						harga_opsi = 146000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 4 || pilih_opsi == 15){
 						harga_opsi = 120000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 5 || pilih_opsi == 16){
 						harga_opsi = 84000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 6 || pilih_opsi == 17){
 						harga_opsi = 71000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 7 || pilih_opsi == 18){
 						harga_opsi = 68000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 8 || pilih_opsi == 19){
 						harga_opsi = 61000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 9 || pilih_opsi == 20){
 						harga_opsi = 58000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 10 || pilih_opsi == 21){
 						harga_opsi = 53000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 11 || pilih_opsi == 22){
 						harga_opsi = 50000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 12 || pilih_opsi == 23){
 						harga_opsi = 46000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 13 || pilih_opsi == 24){
 						harga_opsi = 42000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 25){
 						harga_opsi = 70000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 26){
 						harga_opsi = 45000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 27){
 						harga_opsi = 34000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 28){
 						harga_opsi = 22000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 29){
 						harga_opsi = 10000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 30){
 						harga_opsi = 8000;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 31){
 						harga_opsi = 6500;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 32){
 						harga_opsi = 4500;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 33){
 						harga_opsi = 2500;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 34){
 						harga_opsi = 2000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 35){
 						harga_opsi = 1500;
+						waktuJadi = 10;
 					}
 					else {
 						printf ("\nMOHON INPUTKAN KODE SESUAI DAFTAR EXTRA OPTION !\n");
 						i--;
 					}
 					subtotal_opsi = subtotal_opsi + harga_opsi;
+					subtotal_waktu = subtotal_waktu + waktuJadi;
 					i++;
 				}
 
@@ -940,11 +1016,19 @@ int main (){
 					jumlah_opsi--;
 				} while (1 <= jumlah_opsi);
 				printf ("\n");
+															// >>> REVISI <<<
+				printf ("\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam(subtotal_waktu), subtotal_waktu);
+				printf ("\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
+				printf ("\n");
 				printf ("\n-----------------------------------------------------------------------------");
 				printf ("\n");
 				printf ("\n                           Total Biaya  : Rp. %d", total);
 				printf ("\n");
 				printf ("\n-----------------------------------------------------------------------------");
+				fprintf (hasil2,"\n");
+																	// >>> REVISI <<<
+				fprintf (hasil2,"\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam(subtotal_waktu), subtotal_waktu);
+				fprintf (hasil2,"\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
 				fprintf (hasil2,"\n");
 				fprintf (hasil2,"\n-----------------------------------------------------------------------------");
 				fprintf (hasil2,"\n");
@@ -1100,6 +1184,10 @@ int main (){
 				printf ("\n");
 				printf ("\n                         Opsi Tambahan	: -");
 				printf ("\n");
+															// >>> REVISI <<<
+				printf ("\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam2(subtotal_waktu2), subtotal_waktu2);
+				printf ("\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
+				printf ("\n");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n                           Total Biaya  : Rp. %d", total);
@@ -1116,6 +1204,10 @@ int main (){
 				fprintf (hasil6,"\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
 				fprintf (hasil6,"\n");
 				fprintf (hasil6,"\n                         Opsi Tambahan	: -");
+				fprintf (hasil6,"\n");
+																	// >>> REVISI <<<
+				fprintf (hasil6,"\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam2(subtotal_waktu2), subtotal_waktu2);
+				fprintf (hasil6,"\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
 				fprintf (hasil6,"\n");
 				fprintf (hasil6,"\n=============================================================================");
 				fprintf (hasil6,"\n");
@@ -1253,15 +1345,17 @@ int main (){
 			int jumlah_orang;
 			int harga_perorang = 20000;
 			int price_orang;
+			float subtotal_waktu = 60;
+			float waktuJadi;
 
 			printf ("=============================================================================");
 			printf ("\n|                             PAKET DOKUMENTER                              |");
 			printf ("\n|                  Semakin Banyak Kamera, Semakin Estetik                   |");
 			printf ("\n=============================================================================");
 			printf ("\n\nSilahkan Masukkan Jumlah Fotografer		: ");
-			jumlah_fotografer = checker();
+			jumlah_fotografer = checker3();
 			printf ("\nSilahkan Masukkan Jumlah Videografer		: ");
-			jumlah_videografer = checker();
+			jumlah_videografer = checker3();
 			printf ("\nSilahkan Masukkan Jumlah Orang / Peserta	: ");
 			jumlah_orang = checker();
 			printf ("\n=============================================================================");
@@ -1284,81 +1378,106 @@ int main (){
 					pilih_opsi=checker();
 					if (pilih_opsi == 1){
 						harga_opsi = 40000;
+						waktuJadi = 10;
 					}
 					else if (pilih_opsi == 2){
 						harga_opsi = 180000;
+						waktuJadi = 90;
 					}
 					else if (pilih_opsi == 3 || pilih_opsi == 14){
 						harga_opsi = 146000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 4 || pilih_opsi == 15){
 						harga_opsi = 120000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 5 || pilih_opsi == 16){
 						harga_opsi = 84000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 6 || pilih_opsi == 17){
 						harga_opsi = 71000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 7 || pilih_opsi == 18){
 						harga_opsi = 68000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 8 || pilih_opsi == 19){
 						harga_opsi = 61000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 9 || pilih_opsi == 20){
 						harga_opsi = 58000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 10 || pilih_opsi == 21){
 						harga_opsi = 53000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 11 || pilih_opsi == 22){
 						harga_opsi = 50000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 12 || pilih_opsi == 23){
 						harga_opsi = 46000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 13 || pilih_opsi == 24){
 						harga_opsi = 42000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 25){
 						harga_opsi = 70000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 26){
 						harga_opsi = 45000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 27){
 						harga_opsi = 34000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 28){
 						harga_opsi = 22000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 29){
 						harga_opsi = 10000;
+						waktuJadi = 40;
 					}
 					else if (pilih_opsi == 30){
 						harga_opsi = 8000;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 31){
 						harga_opsi = 6500;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 32){
 						harga_opsi = 4500;
+						waktuJadi = 30;
 					}
 					else if (pilih_opsi == 33){
 						harga_opsi = 2500;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 34){
 						harga_opsi = 2000;
+						waktuJadi = 20;
 					}
 					else if (pilih_opsi == 35){
 						harga_opsi = 1500;
+						waktuJadi = 10;
 					}
 					else {
 						printf ("\nMOHON INPUTKAN KODE SESUAI DAFTAR EXTRA OPTION !\n");
 						i--;
 					}
 					subtotal_opsi = subtotal_opsi + harga_opsi;
+					subtotal_waktu = subtotal_waktu + waktuJadi;
 					i++;
 				}
 				
@@ -1588,11 +1707,19 @@ int main (){
 					jumlah_opsi--;
 				} while (1 <= jumlah_opsi);
 				printf ("\n");
+															// >>> REVISI <<<
+				printf ("\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam(subtotal_waktu), subtotal_waktu);
+				printf ("\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
+				printf ("\n");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n                          Total Biaya   : Rp. %d", total);
 				printf ("\n");
 				printf ("\n=============================================================================");
+				fprintf (hasil11,"\n");
+																	// >>> REVISI <<<
+				fprintf (hasil11,"\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam(subtotal_waktu), subtotal_waktu);
+				fprintf (hasil11,"\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
 				fprintf (hasil11,"\n");
 				fprintf (hasil11,"\n=============================================================================");
 				fprintf (hasil11,"\n");
@@ -1764,6 +1891,10 @@ int main (){
 				printf ("\n");
 				printf ("\n                        Opsi Tambahan	: -");
 				printf ("\n");
+															// >>> REVISI <<<
+				printf ("\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam2(subtotal_waktu2), subtotal_waktu2);
+				printf ("\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
+				printf ("\n");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n                          Total Biaya   : Rp. %d", total);
@@ -1782,6 +1913,10 @@ int main (){
 				fprintf (hasil15,"\n                       Harga %d Orang	: Rp. %d",jumlah_orang, price_orang);
 				fprintf (hasil15,"\n");
 				fprintf (hasil15,"\n                        Opsi Tambahan   : -");
+				fprintf (hasil15,"\n");
+																	// >>> REVISI <<<
+				fprintf (hasil15,"\n                   Estimasi Pengerjaan	: %.2f Jam (%.2f Menit)", menit_ke_jam2(subtotal_waktu2), subtotal_waktu2);
+				fprintf (hasil15,"\n       Estimasi pengerjaan dihitung setelah pengambilan gambar dan/atau video");
 				fprintf (hasil15,"\n");
 				fprintf (hasil15,"\n=============================================================================");
 				fprintf (hasil15,"\n");
