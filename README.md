@@ -1,5 +1,4 @@
 # Tugas-Besar-Algoritma-dan-Pemrograman
 
 Anggota Kelompok : -Athaya Juliant Purnama (2205551027)
-
-                   -I Gede Erwan Widi Separsa
+                   -I Gede Erwan Widi Separsa (2205551044)
